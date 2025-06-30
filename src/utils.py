@@ -1,5 +1,7 @@
-from scapy.all import srp1, Ether, ARP
+from scapy.all import srp1, Ether, conf, ARP
 
+DEFAULT_ROUTE = "0.0.0.0"
+INDEX_OF_IP_ROUTE = 2
 BROADCAST_MAC = "ff:ff:ff:ff:ff"
 
 """
@@ -7,6 +9,13 @@ This function gives our mac address
 """
 def get_our_mac_addr() -> str:
     return Ether().src
+
+"""
+This function gives the default gateway IP
+"""
+def get_default_gateway_ip() -> str:
+    # Get the IP of default gateway from Scapy's routing table
+    return conf.route.route(DEFAULT_ROUTE)[INDEX_OF_IP_ROUTE]
 
 """
 This function gives the MAC address of some IP
