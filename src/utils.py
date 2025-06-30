@@ -3,6 +3,12 @@ from scapy.all import srp1, Ether, ARP
 BROADCAST_MAC = "ff:ff:ff:ff:ff"
 
 """
+This function gives our mac address
+"""
+def get_our_mac_addr() -> str:
+    return Ether().src
+
+"""
 This function gives the MAC address of some IP
 Input: The IP to find his MAC
 Output: The MAC of the IP 
