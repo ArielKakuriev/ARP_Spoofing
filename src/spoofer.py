@@ -2,7 +2,7 @@ from utils import get_our_mac_addr, get_default_gateway_ip, get_mac_addr, send_a
 
 ARP_REPLY_OPCODE = 2
 
-class Spoof:
+class ArpSpoof:
     def __init__(self, victim_ip: str):
         self.__our_mac = get_our_mac_addr()  # Get our MAC
         self.__victim_ip = victim_ip
