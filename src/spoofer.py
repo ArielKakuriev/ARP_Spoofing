@@ -25,3 +25,13 @@ class ArpSpoof:
         raise NotImplementedError("attack() must be implemented by subclass")
     def restore(self) -> None:
         raise NotImplementedError("restore() must be implemented by subclass")
+
+class DosAttack(ArpSpoof):
+    def __init__(self, victim_ip: str):
+        super().__init__(victim_ip)
+
+    def attack(self) -> None:
+        return
+
+    def restore(self) -> None:
+        return
