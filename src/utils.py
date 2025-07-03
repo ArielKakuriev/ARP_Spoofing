@@ -1,5 +1,6 @@
 import random
-import ipaddress
+from ipaddress import IPv4Network
+from netifaces import gateways, AF_INET, ifaddresses
 from scapy.all import srp1, Ether, conf, ARP, send, srp
 
 DEFAULT_ROUTE = "0.0.0.0"
@@ -62,3 +63,16 @@ def is_mac_in_lan(target_mac: str) -> bool:
         if received.hwsrc == target_mac:  # If MAC is in LAN
             return True
     return False
+
+"""
+This function gives our IP range in LAN in cidr format
+Input: None
+Output: The IP range of LAN
+"""
+def get_lan_ip_range_cidr() -> str:
+    network_iface = gateways()['default'][AF_INET][1]  # Get the name of the network interface
+    addr_info = ifaddresses(network_iface)[AF_INET][0]  # Get an info about the address configuration in our network interface
+    ip = addr_info['addr']  # Take the IP
+    netmask = addr_info['netmask']  # Get the subnet mask
+    cidr = IPv4Network(f"{ip}/{netmask}", strict=False).prefixlen  # Get the CIDR notation
+    return f"{ip}/{cidr}"
