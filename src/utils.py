@@ -56,7 +56,7 @@ Input: The MAC to check if exist in LAN
 Output: If MAC address is in the LAN or not
 """
 def is_mac_in_lan(target_mac: str) -> bool:
-    ip_range = ""  # TODO: function of get IP range
+    ip_range = get_lan_ip_range_cidr()  # Get the IP range of our LAN in CIDR format
     msg = Ether(dst=BROADCAST_MAC) / ARP(pdst=ip_range)
     answered_list, unanswered_list = srp(msg, timeout=1, verbose=False)
     for sent, received in answered_list:  # Search for the mac address
