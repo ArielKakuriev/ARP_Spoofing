@@ -1,5 +1,6 @@
 import random
-from scapy.all import srp1, Ether, conf, ARP, send
+import ipaddress
+from scapy.all import srp1, Ether, conf, ARP, send, srp
 
 DEFAULT_ROUTE = "0.0.0.0"
 INDEX_OF_IP_ROUTE = 2
@@ -47,3 +48,17 @@ def generate_fake_mac() -> str:
     first_byte = (first_byte & 0b11111100) | 0b00000010  # Make first byte of the MAC to be valid for spoofing
     mac_bytes = [first_byte] + [random.randint(0x00, 0xFF) for _ in range(5)]  # Create a list of all the bytes in the MAC
     return ':'.join(f'{b:02x}' for b in mac_bytes)  # Formatting it to MAC
+
+"""
+This function checks if a MAC address is in our LAN
+Input: The MAC to check if exist in LAN
+Output: If MAC address is in the LAN or not
+"""
+def is_mac_in_lan(target_mac: str) -> bool:
+    ip_range = ""  # TODO: function of get IP range
+    msg = Ether(dst=BROADCAST_MAC) / ARP(pdst=ip_range)
+    answered_list, unanswered_list = srp(msg, timeout=1, verbose=False)
+    for sent, received in answered_list:  # Search for the mac address
+        if received.hwsrc == target_mac:  # If MAC is in LAN
+            return True
+    return False
