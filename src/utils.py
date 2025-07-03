@@ -1,3 +1,4 @@
+import random
 from scapy.all import srp1, Ether, conf, ARP, send
 
 DEFAULT_ROUTE = "0.0.0.0"
@@ -35,3 +36,14 @@ Output: None
 """
 def send_arp_packet(opcode: int, src_mac: str, src_ip: str, dst_mac: str, dst_ip: str, times_to_send: int = DEFAULT_SEND_COUNT) -> None:
     send(ARP(op=opcode, hwsrc=src_mac, psrc=src_ip, hwdst=dst_mac, pdst=dst_ip), count=times_to_send)  # Send an ARP packet
+
+"""
+This function generate a valid random MAC address
+Input: None
+Output: The random MAC address
+"""
+def generate_fake_mac() -> str:
+    first_byte = random.randint(0x00, 0xFF)  # Generate the first byte of the MAC
+    first_byte = (first_byte & 0b11111100) | 0b00000010  # Make first byte of the MAC to be valid for spoofing
+    mac_bytes = [first_byte] + [random.randint(0x00, 0xFF) for _ in range(5)]  # Create a list of all the bytes in the MAC
+    return ':'.join(f'{b:02x}' for b in mac_bytes)  # Formatting it to MAC
