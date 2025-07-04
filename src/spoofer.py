@@ -5,6 +5,7 @@ from utils import (get_our_mac_addr, get_default_gateway_ip, get_mac_addr,
 ARP_REPLY_OPCODE = 2
 TIME_BETWEEN_SEND_ARP = 10
 TIME_BETWEEN_MAC_SCAN = 60
+SAFE_RESTORE_SEND_ARP_COUNT = 5
 
 class ArpSpoof:
     def __init__(self, victim_ip: str):
@@ -56,5 +57,11 @@ class DosAttack(ArpSpoof):
                 last_arp = now
             time.sleep(TIME_BETWEEN_SEND_ARP)
 
+    """
+    This function safely restore the state to the state before the DoS attack
+    Input: self
+    Output: None 
+    """
     def restore(self) -> None:
-        return
+        # Send 5 times to make sure packets will not get lost(safely restore)
+        send_arp_packet(ARP_REPLY_OPCODE, self._default_gateway_mac, self._default_gateway_ip, self._victim_mac, self._victim_ip, SAFE_RESTORE_SEND_ARP_COUNT)
